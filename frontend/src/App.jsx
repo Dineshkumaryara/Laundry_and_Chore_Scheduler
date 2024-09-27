@@ -6,6 +6,7 @@ import Reminders from './components/Reminders';
 import Supplies from './components/Supplies';
 import Dashboard from './components/Dashboard';
 import LaundryQueue from './components/LaundryQueue';
+import IndexPage from './components/IndexPage'; 
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -37,6 +38,12 @@ const App = () => {
         ) : null}
 
         <Routes>
+          {/* IndexPage for logged-out users */}
+          <Route
+            path="/"
+            element={!user ? <IndexPage /> : <Navigate to="/dashboard" />}
+          />
+
           {/* Login and Register Routes */}
           <Route
             path="/login"
@@ -54,7 +61,7 @@ const App = () => {
           />
           <Route
             path="/user/dashboard"
-            element={user ? <Dashboard /> : <Navigate to="/login" />}  // Route for /user/dashboard
+            element={user ? <Dashboard /> : <Navigate to="/login" />}
           />
           <Route
             path="/reminders"
@@ -68,9 +75,6 @@ const App = () => {
             path="/laundry"
             element={user ? <LaundryQueue /> : <Navigate to="/login" />}
           />
-
-          {/* Default route */}
-          <Route path="/" element={<Navigate to={user ? '/dashboard' : '/login'} />} />
         </Routes>
       </div>
     </Router>

@@ -1,5 +1,9 @@
 const Reminder = require("../models/Reminder");
+const User = require("../models/User");
+const sendReminderEmail = require("../utils/emailService");
 
+// @desc    Create a new reminder
+// @route   POST /api/reminders
 // @desc    Create a new reminder
 // @route   POST /api/reminders
 const createReminder = async (req, res) => {
@@ -18,6 +22,13 @@ const createReminder = async (req, res) => {
     });
 
     const savedReminder = await reminder.save();
+
+    // Fetch the user details to send email
+    const user = await User.findById(req.user._id);
+
+    // Send an email after saving the reminder
+    await sendReminderEmail(user.email, user.name, reminderText, scheduledTime);
+
     res.status(201).json(savedReminder);
   } catch (error) {
     res
