@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './styles/Reminders.css'; // Import the CSS file
 
 const Reminders = () => {
   const [reminders, setReminders] = useState([]);

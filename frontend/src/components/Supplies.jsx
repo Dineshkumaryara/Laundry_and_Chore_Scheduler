@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './styles/Supplies.css'; 
 
 const Supplies = () => {
   const [supplies, setSupplies] = useState([]);
@@ -78,7 +79,7 @@ const Supplies = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Supplies Tracker</h1>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -132,7 +133,9 @@ const Supplies = () => {
       <ul>
         {supplies.map((supply) => (
           <li key={supply._id}>
-            {supply.name}: {supply.quantity} (Low threshold: {supply.lowThreshold})
+            <span>
+              {supply.name}: {supply.quantity} (Low threshold: {supply.lowThreshold})
+            </span>
             <input
               type="number"
               value={supply.quantity}

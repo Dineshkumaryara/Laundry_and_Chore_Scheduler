@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate } from "react-router-dom";
+import './styles/Login.css';
+
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -22,14 +24,14 @@ const Login = ({ onLogin }) => {
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem("token", data.token); // Save token to localStorage
-        onLogin(data); // Pass user data to parent component (App)
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify({ name: data.name, email: data.email })); 
+        onLogin(data);
 
-        // Redirect based on user role (isAdmin)
         if (data.isAdmin) {
-          navigate("/admin/dashboard"); // Redirect to admin dashboard
+          navigate("/admin/dashboard");
         } else {
-          navigate("/user/dashboard"); // Redirect to user dashboard
+          navigate("/user/dashboard");
         }
       } else {
         setError(data.message || "Something went wrong");
@@ -40,26 +42,36 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={submitHandler}>
-        <input
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Enter password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
+    <div className="login-container">
+      <div className="login-card">
+        <h2>Login</h2>
+        {error && <p className="error-message">{error}</p>}
+        <form onSubmit={submitHandler}>
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="login-btn">Login</button>
+        </form>
+      </div>
     </div>
   );
 };

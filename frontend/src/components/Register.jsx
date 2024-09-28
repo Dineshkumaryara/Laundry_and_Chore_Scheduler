@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./styles/Register.css"; // Add this line to import the styles
 
 const Register = ({ onRegister }) => {
   const [name, setName] = useState("");
@@ -32,29 +33,37 @@ const Register = ({ onRegister }) => {
   };
 
   return (
-    <div>
+    <div className="register-container">
       <h1>Register</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="register-error">{error}</p>}
       <form onSubmit={submitHandler}>
         <input
           type="text"
           placeholder="Enter name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          className="register-input"
+          required
         />
         <input
           type="email"
           placeholder="Enter email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="register-input"
+          required
         />
         <input
           type="password"
           placeholder="Enter password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="register-input"
+          required
         />
-        <button type="submit">Register</button>
+        <button type="submit" className="register-button">
+          Register
+        </button>
       </form>
     </div>
   );

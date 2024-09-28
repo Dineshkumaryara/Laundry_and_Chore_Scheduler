@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './styles/LaundryQueue.css';
 
 const LaundryQueue = () => {
   const [machines, setMachines] = useState([]);
@@ -163,51 +164,43 @@ const LaundryQueue = () => {
 
 
   return (
-    <div>
+    <div className="container">
       <h1>Laundry Queue System</h1>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="error-message">{error}</p>}
       {loading && <p>Loading machines...</p>}
 
-      {!loading && machines.length === 0 && <p>No machines available.</p>}
+      {!loading && machines.length === 0 && <p className="no-machines">No machines available.</p>}
 
       {!loading && machines.length > 0 && (
         <ul>
           {machines.map((machine) => (
             <li key={machine._id}>
-              Machine {machine.machineNumber} ({machine.type}) -{' '}
-              {machine.isAvailable ? (
-                <span style={{ color: 'green' }}>Available</span>
-              ) : (
-                <span style={{ color: 'red' }}>
-                  In Use (Remaining: {timer[machine._id] || '0'} minutes)
-                </span>
-              )}
-              <button
-                onClick={() => joinQueue(machine._id)}  // Now `joinQueue` is defined
-                style={{ marginLeft: '10px' }}
-              >
-                Join Queue
-              </button>
-              <ul>
+              <div>
+                <p>Machine {machine.machineNumber} ({machine.type})</p>
+                {machine.isAvailable ? (
+                  <span className="available">Available</span>
+                ) : (
+                  <span className="in-use">In Use (Remaining: {timer[machine._id] || '0'} minutes)</span>
+                )}
+              </div>
+              <button onClick={() => joinQueue(machine._id)}>Join Queue</button>
+              <ul className="queue-list">
                 {machine.queue.length > 0 ? (
-                  <>
-                    {machine.queue.map((q, index) => (
-                      <li key={index}>
-                        {q.user === userId ? (
-                          <strong>Your Queue Position: {index + 1}</strong>
-                        ) : (
-                          <>Queue Position: {index + 1}</>
-                        )}
-                        {/* Position 1 gets the countdown timer */}
-                        {index === 0 ? (
-                          <span> (Timer: {timer[machine._id] || '0'} minutes)</span>
-                        ) : (
-                          <span> (Waiting time: {calculateWaitingTime(machine, index)} minutes)</span>
-                        )}
-                      </li>
-                    ))}
-                  </>
+                  machine.queue.map((q, index) => (
+                    <li key={index} className="queue-item">
+                      {q.user === userId ? (
+                        <strong>Your Queue Position: {index + 1}</strong>
+                      ) : (
+                        <>Queue Position: {index + 1}</>
+                      )}
+                      {index === 0 ? (
+                        <span> (Timer: {timer[machine._id] || '0'} minutes)</span>
+                      ) : (
+                        <span> (Waiting time: {calculateWaitingTime(machine, index)} minutes)</span>
+                      )}
+                    </li>
+                  ))
                 ) : (
                   <li>No one in the queue yet</li>
                 )}

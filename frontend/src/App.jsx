@@ -14,8 +14,9 @@ const App = () => {
   // Check for the token when the app loads
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
-      setUser({ token }); // Set user if token exists
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if (token && userData) {
+      setUser({ ...userData, token });
     }
   }, []);
 
